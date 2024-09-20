@@ -10,7 +10,10 @@ def create_game_selection_ui():
     root = tk.Tk()
     root.title('Game Selection')
 
-    play_snake_button = tk.Button(root, text='Play Snake Game', command=launch_snake_game)
+    frame = tk.Frame(root)
+    frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+    play_snake_button = tk.Button(frame, text='Play Snake Game', command=launch_snake_game)
     play_snake_button.pack(pady=20)
 
     root.mainloop()
