@@ -10,11 +10,9 @@ pygame.init()
 font_style = pygame.font.SysFont(None, 50)
 score_font = pygame.font.SysFont(None, 35)
 
-
 def message(display, msg, color):
     mesg = font_style.render(msg, True, color)
     display.blit(mesg, [SCREEN_WIDTH / 6, SCREEN_HEIGHT / 3])
-
 
 def gameLoop():
     display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
