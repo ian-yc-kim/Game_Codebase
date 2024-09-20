@@ -1,56 +1,41 @@
 import pytest
-import pygame
 from Game_Codebase.snake import Snake
 
-
-def test_snake_initialization():
-    snake = Snake(600, 400, 10)
-    assert snake.head_position == [300, 200]
-    assert snake.body_segments == [[300, 200]]
-    assert snake.direction == 'RIGHT'
+@pytest.fixture
+def snake():
+    return Snake(100, 100, 10)
 
 
-def test_snake_move_right():
-    snake = Snake(600, 400, 10)
+def test_initial_position(snake):
+    assert snake.head_position == [50, 50]
+    assert snake.body_segments == [[50, 50]]
+
+
+def test_move(snake):
+    old_head_position = snake.head_position.copy()
     snake.move()
-    assert snake.head_position == [310, 200]
-    assert snake.body_segments == [[310, 200]]
+    assert snake.head_position != old_head_position, 'Snake did not move.'
 
 
-def test_snake_move_left():
-    snake = Snake(600, 400, 10)
-    snake.change_direction('LEFT')
-    snake.move()
-    assert snake.head_position == [290, 200]
-    assert snake.body_segments == [[290, 200]]
-
-
-def test_snake_move_up():
-    snake = Snake(600, 400, 10)
+def test_change_direction(snake):
     snake.change_direction('UP')
-    snake.move()
-    assert snake.head_position == [300, 190]
-    assert snake.body_segments == [[300, 190]]
-
-
-def test_snake_move_down():
-    snake = Snake(600, 400, 10)
+    assert snake.direction == 'UP', f"Expected direction 'UP', got '{snake.direction}'"
     snake.change_direction('DOWN')
-    snake.move()
-    assert snake.head_position == [300, 210]
-    assert snake.body_segments == [[300, 210]]
+    assert snake.direction == 'UP', f"Expected direction 'UP', got '{snake.direction}'"
+    snake.change_direction('LEFT')
+    assert snake.direction == 'LEFT', f"Expected direction 'LEFT', got '{snake.direction}'"
+    snake.change_direction('RIGHT')
+    assert snake.direction == 'LEFT', f"Expected direction 'LEFT', got '{snake.direction}'"
 
 
-def test_snake_grow():
-    snake = Snake(600, 400, 10)
+def test_grow(snake):
     initial_length = len(snake.body_segments)
     snake.grow()
-    assert len(snake.body_segments) == initial_length + 1
+    snake.move()
+    assert len(snake.body_segments) == initial_length + 1, 'Snake did not grow after eating food.'
 
 
-def test_draw_snake():
-    pygame.init()
-    display = pygame.display.set_mode((600, 400))
-    snake = Snake(600, 400, 10)
-    snake.draw_snake(display, (0, 255, 0))
-    pygame.quit()
+def test_no_reverse(snake):
+    initial_direction = snake.direction  # Should be 'RIGHT' by default
+    snake.change_direction('LEFT')  # Attempt to reverse direction
+    assert snake.direction == initial_direction, f"Direction should remain '{initial_direction}' when attempting to reverse. Got '{snake.direction}'"

@@ -8,6 +8,7 @@ class Snake:
         self.direction = 'RIGHT'
         self.head_position = [display_width // 2, display_height // 2]
         self.body_segments = [self.head_position[:]]
+        self.growing = False
 
     def move(self):
         if self.direction == 'UP':
@@ -20,14 +21,20 @@ class Snake:
             self.head_position[0] += self.block_size
 
         self.body_segments.insert(0, self.head_position[:])
-        self.body_segments.pop()
+        if not self.growing:
+            self.body_segments.pop()
+        else:
+            self.growing = False  # Reset the growing state after growth
 
     def change_direction(self, new_direction):
+        opposite_directions = {'UP': 'DOWN', 'DOWN': 'UP', 'LEFT': 'RIGHT', 'RIGHT': 'LEFT'}
         if new_direction in ['UP', 'DOWN', 'LEFT', 'RIGHT']:
-            self.direction = new_direction
+            # Prevent the snake from reversing directly
+            if new_direction != opposite_directions.get(self.direction):
+                self.direction = new_direction
 
     def grow(self):
-        self.body_segments.append(self.body_segments[-1][:])
+        self.growing = True  # Indicate that the snake should grow on the next move
 
     def draw_snake(self, display, color):
         for segment in self.body_segments:
