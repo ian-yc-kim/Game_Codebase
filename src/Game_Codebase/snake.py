@@ -1,3 +1,5 @@
+import pygame
+
 class Snake:
     def __init__(self, display_width, display_height, block_size):
         self.display_width = display_width
@@ -23,3 +25,10 @@ class Snake:
     def change_direction(self, new_direction):
         if new_direction in ['UP', 'DOWN', 'LEFT', 'RIGHT']:
             self.direction = new_direction
+
+    def grow(self):
+        self.body_segments.append(self.body_segments[-1][:])
+
+    def draw_snake(self, display, color):
+        for segment in self.body_segments:
+            pygame.draw.rect(display, color, [segment[0], segment[1], self.block_size, self.block_size])
