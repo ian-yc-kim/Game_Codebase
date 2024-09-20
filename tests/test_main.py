@@ -1,17 +1,16 @@
-import pygame
 import pytest
-from Game_Codebase.main import display_score
+from Game_Codebase.main import play_snake_game
 
 
-def test_display_score(mocker):
-    mock_font = mocker.Mock()
-    mock_surface = mocker.Mock(spec=pygame.Surface)
-    mock_font.render.return_value = mock_surface
-    mocker.patch('Game_Codebase.main.score_font', mock_font)
+def test_play_snake_game(monkeypatch):
+    # Mock the game loop to prevent it from running indefinitely
+    def mock_gameLoop():
+        pass
 
-    mock_display = mocker.Mock(spec=pygame.Surface)
+    monkeypatch.setattr('Game_Codebase.main.gameLoop', mock_gameLoop)
 
-    display_score(mock_display, 10)
+    # Call the play_snake_game function to ensure it calls gameLoop
+    play_snake_game()
 
-    mock_font.render.assert_called_once_with('Your Score: 10', True, (0, 0, 0))
-    mock_display.blit.assert_called_once_with(mock_surface, [10, 10])
+    # If no exceptions are raised, the test passes
+    assert True

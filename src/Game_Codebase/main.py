@@ -91,8 +91,13 @@ def display_score(display, score):
     display.blit(value, [10, 10])
 
 
-def main():
+def play_snake_game():
     gameLoop()
+
+
+def main():
+    play_snake_game()
+
 
 if __name__ == '__main__':
     main()
