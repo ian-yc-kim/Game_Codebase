@@ -39,3 +39,24 @@ def test_no_reverse(snake):
     initial_direction = snake.direction  # Should be 'RIGHT' by default
     snake.change_direction('LEFT')  # Attempt to reverse direction
     assert snake.direction == initial_direction, f"Direction should remain '{initial_direction}' when attempting to reverse. Got '{snake.direction}'"
+
+
+def test_check_wall_collision(snake):
+    snake.head_position = [0, 0]
+    assert not snake.check_wall_collision(), 'Snake should not collide with wall at initial position.'
+    snake.head_position = [-10, 0]
+    assert snake.check_wall_collision(), 'Snake should collide with left wall.'
+    snake.head_position = [0, -10]
+    assert snake.check_wall_collision(), 'Snake should collide with top wall.'
+    snake.head_position = [100, 0]
+    assert snake.check_wall_collision(), 'Snake should collide with right wall.'
+    snake.head_position = [0, 100]
+    assert snake.check_wall_collision(), 'Snake should collide with bottom wall.'
+
+
+def test_check_self_collision(snake):
+    snake.body_segments = [[50, 50], [40, 50], [30, 50]]
+    snake.head_position = [40, 50]
+    assert snake.check_self_collision(), 'Snake should collide with itself.'
+    snake.head_position = [20, 50]
+    assert not snake.check_self_collision(), 'Snake should not collide with itself.'

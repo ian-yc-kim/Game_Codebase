@@ -39,3 +39,23 @@ class Snake:
     def draw_snake(self, display, color):
         for segment in self.body_segments:
             pygame.draw.rect(display, color, [segment[0], segment[1], self.block_size, self.block_size])
+
+    def check_wall_collision(self):
+        """
+        Check if the snake's head has collided with the wall.
+        :return: True if collision detected, False otherwise
+        """
+        if (self.head_position[0] >= self.display_width or self.head_position[0] < 0 or
+                self.head_position[1] >= self.display_height or self.head_position[1] < 0):
+            return True
+        return False
+
+    def check_self_collision(self):
+        """
+        Check if the snake's head has collided with its body.
+        :return: True if collision detected, False otherwise
+        """
+        for segment in self.body_segments[1:]:
+            if self.head_position == segment:
+                return True
+        return False

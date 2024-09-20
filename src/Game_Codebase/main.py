@@ -60,14 +60,11 @@ def gameLoop():
 
         snake.move()
 
-        if (snake.head_position[0] >= SCREEN_WIDTH or snake.head_position[0] < 0 or
-                snake.head_position[1] >= SCREEN_HEIGHT or snake.head_position[1] < 0):
+        if snake.check_wall_collision():
             game_close = True
 
-        # Check for collision with self
-        for segment in snake.body_segments[1:]:
-            if snake.head_position == segment:
-                game_close = True
+        if snake.check_self_collision():
+            game_close = True
 
         display.fill(WHITE)
         draw_food(display, food_position, GREEN)
