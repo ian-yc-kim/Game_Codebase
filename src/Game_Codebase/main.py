@@ -2,6 +2,7 @@ import pygame
 import random
 from .constants import *
 from .snake import Snake
+from .food import generate_food, draw_food
 
 # Initialize Pygame
 pygame.init()
@@ -26,8 +27,7 @@ def gameLoop():
 
     snake = Snake(SCREEN_WIDTH, SCREEN_HEIGHT, SNAKE_BLOCK_SIZE)
 
-    foodx = round(random.randrange(0, SCREEN_WIDTH - SNAKE_BLOCK_SIZE) / 10.0) * 10.0
-    foody = round(random.randrange(0, SCREEN_HEIGHT - SNAKE_BLOCK_SIZE) / 10.0) * 10.0
+    food_position = generate_food(snake.body_segments)
 
     score = 0
 
@@ -70,16 +70,15 @@ def gameLoop():
                 game_close = True
 
         display.fill(WHITE)
-        pygame.draw.rect(display, GREEN, [foodx, foody, SNAKE_BLOCK_SIZE, SNAKE_BLOCK_SIZE])
+        draw_food(display, food_position, GREEN)
 
         snake.draw_snake(display, BLACK)
         display_score(display, score)
         pygame.display.update()
 
         # Check for collision with food
-        if snake.head_position[0] == foodx and snake.head_position[1] == foody:
-            foodx = round(random.randrange(0, SCREEN_WIDTH - SNAKE_BLOCK_SIZE) / 10.0) * 10.0
-            foody = round(random.randrange(0, SCREEN_HEIGHT - SNAKE_BLOCK_SIZE) / 10.0) * 10.0
+        if snake.head_position == food_position:
+            food_position = generate_food(snake.body_segments)
             snake.grow()
             score += 1
 
