@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import subprocess
+import sys
 
 __all__ = ['create_game_selection_ui']
 
@@ -38,7 +39,7 @@ def launch_snake_game():
     Displays an error message if the game fails to launch.
     """
     try:
-        subprocess.Popen(['python', 'main.py'])
+        subprocess.Popen([sys.executable, 'src/Game_Codebase/main.py'])
     except Exception as e:
         messagebox.showerror('Error', f'Failed to launch the snake game: {e}')
 
